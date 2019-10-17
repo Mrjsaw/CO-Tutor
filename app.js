@@ -18,12 +18,12 @@ Json structure used:
 
 console.log('loaded')
 
-const tempAvg = [];
-const vochtAvg = [];
-const drukAvg = [];
+let tempAvg = [];
+let vochtAvg = [];
+let drukAvg = [];
 
 $(document).ready(function () { 
-    let jsonURL = "http://blynk-cloud.com/FILLinAPIKeyHere/get/v7"; //
+    let jsonURL = "https://jsonplaceholder.typicode.com/todos/1"; //put an api link here to get json
     Plotly.plot('chart1',[{
         y:[],  
         type:'line',
@@ -40,25 +40,37 @@ $(document).ready(function () {
       }]);
       ;
   
-      var cnt = 0;
+      let cnt = 0;
       setInterval(function(){
         $.getJSON(jsonURL, async function(data){
         console.log('loading new JSON data!')
-        
-          Plotly.extendTraces('chart1',{ y:[[getValue(data[0],0)]]}, [0]);
-          Plotly.extendTraces('chart2',{ y:[[getValue(data[0],1)]]}, [0]);
-          Plotly.extendTraces('chart3',{ y:[[getValue(data[0],2)/1000]]}, [0]);
+        //Rng has been used for demo purposes:
+        let rngT = Math.floor(Math.random() * 20) + 10;
+        let rngV = Math.floor(Math.random() * 100) + 1;
+        let rngD = Math.floor(Math.random() * 10000) + 1000;
+        console.log(rngT);
+        console.log(rngD);
+        console.log(rngV);
+         // Plotly.extendTraces('chart1',{ y:[[getValue(data[0],0)]]}, [0]);
+          //Plotly.extendTraces('chart2',{ y:[[getValue(data[0],1)]]}, [0]);
+          //Plotly.extendTraces('chart3',{ y:[[getValue(data[0],2)/1000]]}, [0]);
+          Plotly.extendTraces('chart1',{ y:[[rngT]]}, [0]);
+          Plotly.extendTraces('chart2',{ y:[[rngV]]}, [0]);
+          Plotly.extendTraces('chart3',{ y:[[rngD]]}, [0]);
           cnt++;
-          tempAvg.push(parseInt(getValue(data[0],0),10));          
-          vochtAvg.push(parseInt(getValue(data[0],1),10));
-          drukAvg.push(parseInt(getValue(data[0],2),10));
+          //tempAvg.push(parseInt(getValue(data[0],0),10)); 
+          tempAvg.push(rngT);
+          vochtAvg.push(rngV);
+          drukAvg.push(rngD);
+          //vochtAvg.push(parseInt(getValue(data[0],1),10));
+          //drukAvg.push(parseInt(getValue(data[0],2),10));
           $('#val1').text(average((tempAvg)));
           $('#val2').text(average(vochtAvg));
           $('#val3').text(average(drukAvg));  
 
-          var d = new Date();
-          var t = d.toLocaleTimeString();
-          var s = t.substring(0, t.length-3);
+          //var d = new Date();
+          //var t = d.toLocaleTimeString();
+          //var s = t.substring(0, t.length-3);
           if(cnt > 20) {
             Plotly.relayout('chart1',{
                 xaxis: {
